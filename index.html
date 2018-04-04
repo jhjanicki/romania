@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  
+    <title>Romania Map</title>
+
+    <link rel="icon" type="image/png" href="img/spp.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Leafet CSS -->
+    <link rel="stylesheet" href="libraries/leaflet/leaflet.css" type="text/css" />
+    
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">		
+
+    <!-- Jquery UI autocomplete -->
+    <link rel="stylesheet" href="libraries/jquery-ui-autocomplete/jquery-ui.min.css" />
+    
+	<style>
+		
+		
+		
+		body {
+			font-family: 'Roboto', sans-serif;
+			padding:10px;
+		}
+		/* map page */
+		#mapContainer{
+			width:100%;
+			height:700px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#map-page{
+			/* min-height:700px; */
+	
+		}
+
+
+		#map-page-s2{
+			background-color:#92a05f;
+	
+		}
+
+		#map-page-s2 p{
+			color:#F0EDE2;
+		} 
+
+		#map-page-s2 h2,#map-page-s2 h4{
+			color:#F0EDE2;
+			/* margin-top: 30px; */
+		}
+		hr.map-hr{
+			width: 300px;
+			color:#F0EDE2;
+			background-color:#F0EDE2;
+			height:2px;
+		}
+		#second-map-title{
+			margin-top:30px;
+			margin-left:0px;
+			font-size:34px;
+			text-shadow: 1px 0px 1px rgba(255, 255, 255, 0.3), -1px 0px 1px rgba(255, 255, 255, 0.3), 0px 1px 1px rgba(255, 255, 255, 0.3), 0px -1px 1px rgba(255, 255, 255, 0.3);
+		}
+
+		#below-map-title{
+			margin-top:0px;
+			padding-top:30px;
+		}
+		
+		.infolabel{
+		position:absolute;
+		top:160px; /* take out */
+		left:230px; /* take out */
+		min-width:220px;
+		max-width:500px;
+		max-height:80px;
+		text-align: center;
+		padding:10px;
+		padding-top:4px;
+		/* border-radius: 10px; */
+	}
+	
+
+	.infolabel p{
+		font-size:14px;
+		font-weight:300;
+		text-align:left;
+	}
+	
+	.infolabel h4{
+		font-size:20px;
+		font-weight:400;
+		text-align:center;
+		color:white;
+		padding:4px;
+		border-radius:4px;
+	}
+
+	.infopanel{
+		padding:10px;
+		border-radius: 10px;
+		width:230px;
+		min-height:140px;
+		position:absolute;
+		top:80px;
+		left:30px;
+		background-color: white;
+		color:black;
+		box-shadow: 10px 10px 5px #888888;
+		text-align: center;
+		z-index:999;
+		
+	}
+
+	.infopanel p{
+		font-size:14px;
+		margin-bottom:0px !important;
+	}
+	.infopanel h4{
+		font-size:20px;
+		margin-top:10px;
+		color:white;
+		/* background-color:rgb(70, 182, 152); */
+		padding:2px;
+		border-radius:5px;
+	}
+	</style>
+</head>
+<body>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div id="side">
+					<div id="open_text">
+						<h3 id='second-map-title'> Romania Map </h3>
+						<hr>
+					</div>
+					<div id="reset"> <img src = ""/></div>
+			
+				<div id="site_view">
+				</div>
+			</div>
+	
+			<div id="mapContainer">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+	   <div class="col-md-12 text-center site-details">   
+			<div id="site-overview"></div> <!-- id, name, number, lat/lon, host -->
+			<div id="site-images"></div>
+			<div id="site-description"></div>
+			<div id="site-traps"></div>
+			<div id="site-history"></div>
+			<div id="site-vegetation"></div>
+			<div id="site-weather"></div> <!-- weather station -->
+		</div>
+	</div>
+
+
+
+ <!-- jQuery -->
+    <script src="libraries/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    
+    <!-- D3 -->
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    
+    <!-- D3.geo -->
+    <script src="https://d3js.org/d3.geo.projection.v0.min.js"></script>
+    
+    <!-- Topojson -->
+	<script src="libraries/topojson-js/topojson.min.js"></script> 
+	
+	<!-- Leaflet -->
+	<script src="libraries/leaflet/leaflet.js" type="text/javascript"></script>
+	
+	<!-- Jquery UI autocomplete -->
+	<script src="libraries/jquery-ui-autocomplete/jquery-ui.js" type="text/javascript"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript"></script>
+
+	
+	<script>
+	
+	//dataset for each site
+	
+	var sites_dataset = sites_dataset =[{"locality_code":"S0004","adm_region":"Onna","locality_name":"OIST Open S0004","site_id":"OISTOP","latitude":26.4631,"longitude":127.82857,"elevation":67,"site_number":"Site 01","collaborator":null,"description":null,"Japanese_name":"","img_url":[]},{"locality_code":"S0005","adm_region":"Onna","locality_name":"OIST Open S0005","site_id":"OISTOP","latitude":26.46294,"longitude":127.82893,"elevation":66,"site_number":"Site 01","collaborator":null,"description":null},{"locality_code":"S0006","adm_region":"Onna","locality_name":"OIST Open S0006","site_id":"OISTOP","latitude":26.46351,"longitude":127.82809,"elevation":62,"site_number":"Site 01","collaborator":null,"description":null},{"locality_code":"S0007","adm_region":"Onna","locality_name":"OIST Forest S0007","site_id":"OISTFR","latitude":26.46517,"longitude":127.8422,"elevation":120,"site_number":"Site 02","collaborator":null,"description":null},{"locality_code":"S0008","adm_region":"Onna","locality_name":"OIST Forest S0008","site_id":"OISTFR","latitude":26.46509,"longitude":127.8419,"elevation":107,"site_number":"Site 02","collaborator":null,"description":null},{"locality_code":"S0009","adm_region":"Onna","locality_name":"OIST Forest S0009","site_id":"OISTFR","latitude":26.4648,"longitude":127.84209,"elevation":113,"site_number":"Site 02","collaborator":null,"description":null}];
+
+
+	//functions to draw leaflet+D3 map
+
+		var southWest = L.latLng(43.7,22.3),
+		northEast = L.latLng(48.2,26.9),
+		bounds = L.latLngBounds(southWest, northEast);
+
+		var map = new L.Map("mapContainer", {
+					center: [46.34,24.8], 
+					zoom: 7,
+					minZoom:5,
+					maxBounds: bounds,
+					maxZoom:17
+				});
+	
+
+	
+		$("#reset").on('click',function(){
+			map.setView(new L.LatLng(46.34,24.8), 6);
+		});
+		
+
+
+		L.tileLayer('', {
+			attribution: '',
+		}).addTo(map);
+
+		var layersControl = L.control.layers({
+			'OSM Landscape': L.tileLayer('http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=f558d495599e45f38a987bfe87fed419').addTo(map),
+			'Open Topo':L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png?apikey=f558d495599e45f38a987bfe87fed419'),
+			'Hydra':L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png')
+			}).addTo(map);
+
+
+	
+
+		$(".leaflet-control-layers").addClass("leaflet-control-layers-expanded");
+		   
+		map.scrollWheelZoom.disable();
+		map.touchZoom.disable();
+
+		var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+			g = svg.append("g").attr("class", "leaflet-zoom-hide");
+		var sites = g.append("g");
+
+		function projectPoint(x, y) {
+			var point = map.latLngToLayerPoint(new L.LatLng(y, x)); 
+			this.stream.point(point.x, point.y); 
+
+		}
+		var transform = d3.geo.transform({point: projectPoint}),
+			path = d3.geo.path().projection(transform);
+
+
+	d3.json("romania.json", function(error1, outline){
+
+	d3.json("romaniaADM1.json", function(error, data){
+	
+	d3.json("np.json", function(error, np){
+
+		var romaniaPath = g.append("g").attr("id","counties");
+		var romaniaBorder = g.append("g").attr("id","country");
+		var romaniaNP = g.append("g").attr("id","np");
+		
+		console.log(np);
+		
+		
+		var romania = data;
+		
+		console.log(romania);
+		
+		
+		
+		var extent = getMaxMin(np.features);
+		
+		
+		var colorScale = makeColorScale(extent);
+
+		function loadPolygons(){
+		
+		
+				console.log(outline.features);
+		
+				  romaniaBorder.datum(outline).append("path").attr("d", path).attr("fill","none")
+					   .style("stroke","#3E3F3A")
+					   .style("stroke-width",3);
+
+				  romaniaNP.selectAll("path")
+				  		.data(np.features)
+				  		.enter()
+				  		.append("path")
+				  		.attr("d",path)
+				  		.attr("fill", function(d) {
+						  return choropleth(d.properties.volume, colorScale);
+						})
+				  		.style("opacity",0.9)
+				  		.style("stroke","#3e3f3a")
+					    .style("stroke-width",1)
+					    .on("mouseover",function(d,i){
+							d3.select(this)
+							.transition()
+							.duration(500)
+							.style({
+								'opacity':0.7,
+								'cursor':'pointer'
+								});
+							if(d.properties.volume){
+								drawInfolabel(d,i);
+							}
+						})
+						.on("mouseout",function(d,i){
+							d3.select(this)
+							.transition()
+							.duration(500)
+							.style({
+								'opacity':0.9
+								});
+							removeInfolabel(d,i);
+						});
+
+				  romaniaPath.selectAll("path")
+					   .data(romania.features)
+					   .enter()
+					   .append("path")
+					   .attr("d", path)
+					   .attr("fill","none")
+					   .style("stroke","#374224")
+					   .style("stroke-width",0.7);
+				
+					var bounds = path.bounds(romania),
+						topLeft = bounds[0],
+						bottomRight = bounds[1];
+				
+					 svg.attr("width", bottomRight[0] - topLeft[0])
+						.attr("height", bottomRight[1] - topLeft[1])
+						.style("left", topLeft[0] + "px")
+						.style("top", topLeft[1] + "px");
+
+					 g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+		
+	
+		}
+
+	
+		loadPolygons();
+		drawSites(20);
+		map.on("viewreset", resetView);
+		
+		
+		// .style("fill", function(d) {
+// 			  return choropleth(d.properties, colorScale);
+// 		 })
+		
+		 
+		 
+		 function getMaxMin(passedArray){
+		 
+		 	var newarr = [];
+			passedArray.forEach(function(d){
+			
+				if(d.properties.volume != undefined){
+				var newobj = {};
+				newobj['id']=+d.id;
+				newobj['vol']=+d.properties.volume;
+				newarr.push(newobj);
+				}
+		
+			});
+		
+			console.log(newarr);
+		
+			var localmax = Math.max.apply(Math,newarr.map(function(d){return d.vol;}));
+			var localmin = Math.min.apply(Math,newarr.map(function(d){return d.vol;}));
+
+			
+			var localextent = [localmin,localmax];
+			
+			return localextent;
+		 
+		 }
+
+		
+		
+		function makeColorScale(localextent){
+			
+			var localmin = localextent[0];
+			var localmax = localextent[1];
+			var diff = localmax-localmin;
+			var divided = diff / 5;
+			
+			var colorScale = d3.scale.linear()
+				.domain([localmin, localmin+ divided, localmin+ divided*2,localmin+ divided*3,localmin+ divided*4,localmin+ divided*5])
+				.range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000']);
+			return colorScale;
+		};
+		
+		
+		function choropleth(val){
+			
+			if (val){
+				return colorScale(val);
+			} else {
+				return "black";
+			};
+		
+		}
+		
+			
+
+			
+			
+			
+	
+		function getProjection() {
+			return function(xy){ return map.latLngToLayerPoint(new L.LatLng(xy[1], xy[0])) };
+		}
+	
+	
+	
+	
+		function drawSites(wh){
+	
+
+				sites.selectAll("circle")
+						.data(sites_dataset)
+						.enter()
+						.append("svg:image")
+						.attr("xlink:href", "https://dl.dropboxusercontent.com/u/102373131/okeon-img/tear-icon-red4.png")
+						.attr("x", function(d, i) {
+							//console.log(getProjection()([d.longitude,d.latitude]).x);
+							return getProjection()([d.longitude,d.latitude]).x-wh+200/wh;})
+						.attr("y", function(d, i) {return getProjection()([d.longitude,d.latitude]).y-wh+200/wh;})
+						.attr("width", wh)
+						.attr("height", wh)
+						.style("opacity",0.9)
+						.on("mouseover",function(d,i){
+							console.log(getProjection()([d.longitude,d.latitude]).x);
+							console.log(getProjection()([d.longitude,d.latitude]).y);
+							d3.select(this)
+							.transition()
+							.duration(500)
+							.style({
+								'opacity':0.7,
+								'cursor':'pointer'
+								});
+							drawInfolabel(d,i);
+						})
+						.on("mouseout",function(d,i){
+							d3.select(this)
+							.transition()
+							.duration(500)
+							.style({
+								'opacity':0.9
+								});
+							removeInfolabel(d,i);
+						})
+						.on('click',function(d,i){
+								zoomPanTo(d.latitude, d.longitude);
+								console.log('site_details');
+								var clickedSite;
+								site_details.forEach(function(d2){
+									//console.log(d2);
+									if(d.site_id == d2.site_id){
+										clickedSite = d2;
+									}
+								});
+								drawSitePanel(clickedSite,i);
+								$('html, body').animate({
+									scrollTop: $("#mapContainer").offset().top
+								}, 500);
+						});
+					
+			
+	
+		}
+	
+	
+		function removeSites(){
+			//sites.selectAll("circle").remove();
+			sites.selectAll("image").remove();
+		}
+
+
+		function resetView() {
+		//console.log(map.getZoom());
+				if (romania) {
+					var bounds = path.bounds(romania),
+						topLeft = bounds[0],
+						bottomRight = bounds[1];
+				
+
+					svg.attr("width", bottomRight[0] - topLeft[0])
+							.attr("height", bottomRight[1] - topLeft[1])
+							.style("left", topLeft[0] + "px")
+							.style("top", topLeft[1] + "px");
+
+					g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+
+					romaniaPath.selectAll('path').attr("d", path);
+					romaniaBorder.select('path').attr("d", path);	
+					romaniaNP.selectAll('path').attr("d",path);		
+				}
+			
+
+			//if fieldsites view is selected
+		
+				 if (map.getZoom() === 10) {
+					removeSites();
+					//drawSites(5); if circle instead of image 
+					drawSites(20); 
+				 }else if(map.getZoom() === 11){
+					removeSites();
+					//drawSites(7); 
+					drawSites(25); 
+			 
+				 }else if(map.getZoom() === 12){
+					removeSites();
+					//drawSites(9);
+					drawSites(30); 
+				 }else if(map.getZoom() === 13){
+					removeSites();
+					drawSites(35);
+				 }else if (map.getZoom() === 14){
+					removeSites();
+					//drawSites(11);
+					drawSites(35);
+				 }
+				 else if (map.getZoom() === 15){
+					removeSites();
+					drawSites(40);
+			 
+				 }
+				
+		
+		}
+	
+	
+			// for points
+		function drawInfolabel(d,i){
+			console.log(d.properties.name);
+			//console.log(display);
+			
+			
+				var labelHTML = "<h4 style='background-color:#fc8d59;' >"+d.properties.name+"</h4><b><p>&nbsp;&nbsp; Volume: "+d.properties.volume+"</b> cubic meters</p>";
+		
+				var infolabel=d3.select("#mapContainer").append("div")
+					.attr("class","infolabel")
+					.style("box-shadow", "5px 5px 5px #888888")
+					.style("background-color", "white") 
+					.attr("id", "infolabel-"+i)
+					.style("color","black")
+					.html(labelHTML);
+			
+	
+		}
+	
+		function removeInfolabel(d,i){
+			//d3.select(".infolabel").remove();
+			d3.select("#infolabel-"+i).remove();
+			d3.select("#infolabel-col"+i).remove();
+		}
+	
+	
+	
+	
+		function drawSitePanel(d,i){
+			var overviewHTML="<h1>"+d.site_name+"</h1><hr><h3><b>Collaborator:</b> "+d.owner+
+			"&nbsp;&nbsp;&nbsp; <b>Site ID: </b>"+d.site_id+"&nbsp;&nbsp;&nbsp; <b>Site Number: </b>"+d.site_number+
+			"&nbsp;&nbsp;&nbsp; <b>Type of Site: </b>"+d.type+"&nbsp;&nbsp;&nbsp; <b>Location: </b>"+d.location+"</h3>";
+			
+		   
+			d3.selectAll('.img-sites').remove();
+		
+			var img_container = d3.select("#site-images").append("div").classed('row','true');
+			var img_div1 = img_container.append("div")
+					.classed("col-sm-4","true")
+					.attr("id","img-"+i+"0");
+			var indv_img1 = img_div1.append("img")
+					.classed("img-responsive","true")
+					.classed("img-sites","true")
+					.attr('src', d.img1);
+			var img_div2 = img_container.append("div")
+					.classed("col-sm-4","true")
+					.attr("id","img-"+i+"1");
+			var indv_img2 = img_div2.append("img")
+					.classed("img-responsive","true")
+					.classed("img-sites","true")
+					.attr('src', d.img2);
+			var img_div3 = img_container.append("div")
+					.classed("col-sm-4","true")
+					.attr("id","img-"+i+"2");
+			var indv_img3 = img_div3.append("img")
+					.classed("img-responsive","true")
+					.classed("img-sites","true")
+					.attr('src', d.img3);
+		
+		
+			var site_overview=d3.select("#site-overview")
+			.attr("class","site-overview")
+			.html(overviewHTML);
+		
+			var descriptionHTML;
+		
+			var trapsHTML;
+		
+			var weatherHTML;
+
+				descriptionHTML = "<h2 class='site-titles'> Description </h2><h3>"+d.description+"</h3>";
+				trapsHTML = "<h2 class='site-titles'> Traps </h2><h3>&nbsp;&nbsp;<b>"+d.trap1+
+			"</b>: ["+d.lat1+", "+d.lon1+"] <br>&nbsp;&nbsp;<b>"+d.trap2+"</b>: ["+d.lat2+", "+d.lon2+
+			"] <br>&nbsp;&nbsp;<b>"+d.trap3+"</b>: ["+d.lat3+", "+d.lon3+"]</h3>";
+			weatherHTML = "<h2 class='site-titles'> Weather Station </h2><h3>&nbsp;&nbsp;"+d.weather_station+"</h3>";
+			
+		
+		
+			var site_description= d3.select("#site-description")
+			.attr("class","site-description")
+			.html(descriptionHTML);
+		
+		
+			var site_traps= d3.select("#site-traps")
+			.attr("class","site-traps")
+			.html(trapsHTML);
+		
+		
+			var site_weather = d3.select("#site-weather")
+			.attr("class","site-weather")
+			.html(weatherHTML);
+		}
+	
+		function zoomPanTo(x,y){
+			d3.select(".infolabel").remove();
+			map.setView(new L.LatLng(x,y),15, {animate: true});
+		}
+
+	});
+
+	});
+	
+	});
+	
+	
+	</script>
+	
+   
+  
+
+
+<footer>
+	<p>
+	
+	&copy;&nbsp;Environmental Investigation Agency 2018&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+	Developer: Julia Janicki
+	</p>
+	
+</footer>
+
+
+</body>
+
+</html>
