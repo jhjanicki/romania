@@ -26,12 +26,129 @@
     
 	<style>
 		
-		
-		
+		html {
+		}
+
 		body {
 			font-family: 'Roboto', sans-serif;
-			padding:10px;
+			padding-left:10px;
+			padding-right:10px;
+			padding-top:10px;
+			padding-bottom:0px;
+			margin-bottom:0px;
+		    font-size: 14px;
 		}
+
+		/* =14px */
+		h1 {
+		  font-size: 2.4rem;
+		}
+
+		.toggle-btn-container {
+		  background-color: none;
+		  margin-left:0px;
+		  position:relative;
+		}
+		
+		#np, #pa{
+			position:absolute;
+			top:44px;
+			left:150px;
+		}
+
+		
+
+		.toggle-btn {
+		  background-color: #969696;
+		  width: 230px;
+		  height: 130px;
+		  border-radius: 98px;
+		  padding:10px;
+		  display: block;
+		  -webkit-transform: scale(0.5);
+		  margin-left:-50px;
+		}
+		
+		#toggle-button{
+			margin-top:-30px;
+		}
+		
+		#toggle-button2{
+			margin-top:-40px;
+		}
+
+		.toggle-btn__inner, .toggle-btn__inner2 {
+		  background-color: #fcc5c0;
+		  width: 110px;
+		  height: 110px;
+		  border-radius: 50%;
+		  top: 0;
+		  position: relative;
+		  left: 0;
+		  transform: rotate(0deg);
+		  transition: transform 0.5s ease, left 0.5s ease, background-color 0.75s ease;
+		}
+		.toggle-btn__inner--on,.toggle-btn__inner--on2 {
+		  left: 100px;
+		  transform: rotate(-90deg);
+		  background-color: #ae017e;
+		  transition: transform 0.5s ease, left 0.5s ease, background-color 0.75s ease;
+		}
+
+		.toggle-btn__icon,.toggle-btn__icon2 {
+		  position: relative;
+		  top: 50px;
+		  -webkit-transform: translateY(-50%);
+		  -ms-transform: translateY(-50%);
+		  transform: translateY(-50%);
+		  margin: 0 auto;
+		  width: 40px;
+		  height: 40px;
+		}
+		
+		.toggle-btn__inner:hover, .toggle-btn__inner2:hover {
+			cursor:pointer;
+		
+		}
+			
+		.toggle-btn__icon__line,.toggle-btn__icon__line2 {
+		  display: inline-block;
+		  width: 5rem;
+		  height: 0.5rem;
+		  background-color: #fff;
+		  position: relative;
+		  transform: rotate(-45deg);
+		  border-radius: 0.3rem;
+		  top: 1rem;
+		  left: -0.5rem;
+		}
+		.toggle-btn__icon__line:before,.toggle-btn__icon__line2:before {
+		  display: inline-block;
+		  width: 5rem;
+		  height: 0.5rem;
+		  background: #fff;
+		  transition: 0.3s;
+		  position: absolute;
+		  transform: rotate(90deg);
+		  left: 0;
+		  right: 0;
+		  content: '';
+		  border-radius: 0.3rem;
+		}
+		.toggle-btn__icon__line--tick,.toggle-btn__icon__line--tick2 {
+		  top: 2rem;
+		  left: -1rem;
+		  transform: rotate(-140deg);
+		  transition: left 0.5s ease, transform 0.5s ease, top 0.5s ease;
+		}
+		.toggle-btn__icon__line--tick:before,.toggle-btn__icon__line--tick2:before {
+		  width: 2.5rem;
+		  left: 3.4rem;
+		  top: 1rem;
+		  transform: rotate(-90deg);
+		  transition: width 0.5s ease, transform 0.5s ease, left 0.5s ease, top 0.5s ease;
+		}
+	
 		/* map page */
 		#mapContainer{
 			width:100%;
@@ -77,82 +194,125 @@
 		}
 		
 		.infolabel{
-		position:absolute;
-		top:160px; /* take out */
-		left:230px; /* take out */
-		min-width:220px;
-		max-width:500px;
-		max-height:80px;
-		text-align: center;
-		padding:10px;
-		padding-top:4px;
-		/* border-radius: 10px; */
-	}
+			position:absolute;
+			top:160px; /* take out */
+			left:230px; /* take out */
+			min-width:220px;
+			max-width:500px;
+			max-height:80px;
+			text-align: center;
+			padding:10px;
+			padding-top:4px;
+			/* border-radius: 10px; */
+		}
 	
 
-	.infolabel p{
-		font-size:14px;
-		font-weight:300;
-		text-align:left;
-	}
+		.infolabel p{
+			font-size:14px;
+			font-weight:300;
+			text-align:left;
+		}
 	
-	.infolabel h4{
-		font-size:20px;
-		font-weight:400;
-		text-align:center;
-		color:white;
-		padding:4px;
-		border-radius:4px;
-	}
+		.infolabel h4{
+			font-size:20px;
+			font-weight:400;
+			text-align:center;
+			color:white;
+			padding:4px;
+			border-radius:4px;
+		}
 
-	.infopanel{
-		padding:10px;
-		border-radius: 10px;
-		width:230px;
-		min-height:140px;
-		position:absolute;
-		top:80px;
-		left:30px;
-		background-color: white;
-		color:black;
-		box-shadow: 10px 10px 5px #888888;
-		text-align: center;
-		z-index:999;
+		.infopanel{
+			padding:10px;
+			border-radius: 10px;
+			width:230px;
+			min-height:140px;
+			position:absolute;
+			top:80px;
+			left:30px;
+			background-color: white;
+			color:black;
+			box-shadow: 10px 10px 5px #888888;
+			text-align: center;
+			z-index:999;
 		
-	}
+		}
 
-	.infopanel p{
-		font-size:14px;
-		margin-bottom:0px !important;
-	}
-	.infopanel h4{
-		font-size:20px;
-		margin-top:10px;
-		color:white;
-		/* background-color:rgb(70, 182, 152); */
-		padding:2px;
-		border-radius:5px;
-	}
+		.infopanel p{
+			font-size:14px;
+			margin-bottom:0px !important;
+		}
+		.infopanel h4{
+			font-size:20px;
+			margin-top:10px;
+			color:white;
+			/* background-color:rgb(70, 182, 152); */
+			padding:2px;
+			border-radius:5px;
+		}
+		
+		footer{
+			background-color:black;
+			color: white;
+			text-align: center;
+		}
+		
+		.inline{
+			display: inline;
+		}
 	</style>
 </head>
 <body>
 
 	<div class="row">
 		<div class="col-md-12">
-			<div id="side">
-					<div id="open_text">
-						<h3 id='second-map-title'> Romania Map </h3>
-						<hr>
-					</div>
-					<div id="reset"> <img src = ""/></div>
-			
-				<div id="site_view">
-				</div>
+			<div id="open_text">
+				<h3 id='second-map-title'> Romania Map </h3>
+				<hr>
 			</div>
-	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<h4> Description </h4>
+			<hr>
+			<p>Prism lumbersexual adaptogen, before they sold out cliche street art umami mumblecore pinterest hashtag messenger bag chambray synth meggings. Plaid flannel poutine, shoreditch meditation chartreuse irony shaman organic. Selfies kitsch leggings shaman PBR&B coloring book hell of brunch unicorn actually literally fam skateboard bicycle rights. Chillwave chia meggings hashtag fixie freegan. Asymmetrical locavore selfies blue bottle. Flexitarian put a bird on it vinyl, bicycle rights cliche man braid offal iPhone. Taxidermy aesthetic brooklyn locavore 8-bit lumbersexual microdosing.</p>
+			
+
+			 <div class="container__item toggle-btn-container" id="toggle-button">
+				<div class="toggle-btn">
+				  <div class="toggle-btn__inner toggle-btn__inner--on">
+					<div class="toggle-btn__icon">
+					  <span class="toggle-btn__icon__line toggle-btn__icon__line--tick"></span>
+					</div>
+				  </div>
+				</div>
+				<h4 id="np"> National Parks </h4>
+			  </div>
+	 
+			  
+			  <div class="container__item toggle-btn-container" id="toggle-button2">
+				<div class="toggle-btn">
+				  <div class="toggle-btn__inner2">
+					<div class="toggle-btn__icon2">
+					  <span class="toggle-btn__icon__line2"></span>
+					</div>
+				  </div>
+				</div>
+				<h4 id="pa"> Protected Areas </h4>
+			  </div>
+
+		
+		</div>
+		
+		<div class="col-md-9">
+			<div id="side">
+				<div id="reset"> <img src = ""/></div>
+			</div>
 			<div id="mapContainer">
 			</div>
 		</div>
+		
 	</div>
 	<div class="row">
 	   <div class="col-md-12 text-center site-details">   
@@ -166,6 +326,7 @@
 		</div>
 	</div>
 
+	
 
 
  <!-- jQuery -->
@@ -193,7 +354,10 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript"></script>
 
 	
+	
 	<script>
+	
+	
 	
 	//dataset for each site
 	
@@ -202,14 +366,14 @@
 
 	//functions to draw leaflet+D3 map
 
-		var southWest = L.latLng(43.7,22.3),
-		northEast = L.latLng(48.2,26.9),
-		bounds = L.latLngBounds(southWest, northEast);
+		var southWest = L.latLng(43.054493, 18.668006), // 43.7,22.3
+		northEast = L.latLng(48.918660, 30.001495), // 48.2,26.9
+ 		bounds = L.latLngBounds(southWest, northEast);
 
 		var map = new L.Map("mapContainer", {
 					center: [46.34,24.8], 
 					zoom: 7,
-					minZoom:5,
+					minZoom:6,
 					maxBounds: bounds,
 					maxZoom:17
 				});
@@ -258,12 +422,16 @@
 	d3.json("romaniaADM1.json", function(error, data){
 	
 	d3.json("np.json", function(error, np){
+	
+	d3.json("geozpi.json", function(error, protect){
 
 		var romaniaPath = g.append("g").attr("id","counties");
 		var romaniaBorder = g.append("g").attr("id","country");
 		var romaniaNP = g.append("g").attr("id","np");
+		var romaniaPA = g.append("g").attr("id","protect");
 		
 		console.log(np);
+		console.log(protect);
 		
 		
 		var romania = data;
@@ -285,6 +453,17 @@
 				  romaniaBorder.datum(outline).append("path").attr("d", path).attr("fill","none")
 					   .style("stroke","#3E3F3A")
 					   .style("stroke-width",3);
+					   
+					   
+				  romaniaPA.selectAll("path")
+				  		.data(protect.features)
+				  		.enter()
+				  		.append("path")
+				  		.attr("d",path)
+				  		.attr("fill", "#83ae9b")
+				  		.style("stroke","#969696")
+					    .style("stroke-width",1)
+					    .style("opacity",0);
 
 				  romaniaNP.selectAll("path")
 				  		.data(np.features)
@@ -302,7 +481,7 @@
 							.transition()
 							.duration(500)
 							.style({
-								'opacity':0.7,
+								'stroke-width':2,
 								'cursor':'pointer'
 								});
 							if(d.properties.volume){
@@ -314,7 +493,7 @@
 							.transition()
 							.duration(500)
 							.style({
-								'opacity':0.9
+								'stroke-width':1
 								});
 							removeInfolabel(d,i);
 						});
@@ -339,6 +518,8 @@
 
 					 g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
 		
+					 
+					 
 	
 		}
 
@@ -347,11 +528,61 @@
 		drawSites(20);
 		map.on("viewreset", resetView);
 		
+		var npchecked = true; 
+		var toggleBtn = document.querySelector('.toggle-btn__inner');
+		var toggleBtnIcon  = document.querySelector('.toggle-btn__icon__line');
+
+		toggleBtn.addEventListener('click', function(){
+			  toggleBtn.classList.toggle('toggle-btn__inner--on');
+			  toggleBtnIcon.classList.toggle('toggle-btn__icon__line--tick');
+	  
+			  if(npchecked == false){
+				npchecked = true;
+			  }else{
+				npchecked = false;
+			  }
+		  
+			  checkNP();
+		});
+		
+		var pachecked = false; 
+		var toggleBtn2 = document.querySelector('.toggle-btn__inner2');
+		var toggleBtnIcon2  = document.querySelector('.toggle-btn__icon__line2');
+
+		toggleBtn2.addEventListener('click', function(){
+			  toggleBtn2.classList.toggle('toggle-btn__inner--on2');
+			  toggleBtnIcon2.classList.toggle('toggle-btn__icon__line--tick2');
+	  
+			  if(pachecked == false){
+				pachecked = true;
+			  }else{
+				pachecked = false;
+			  }
+			  
+			  checkPA();
+
+		});
 		
 		// .style("fill", function(d) {
 // 			  return choropleth(d.properties, colorScale);
 // 		 })
 		
+		
+		function checkNP(){
+			if(npchecked == false){
+			romaniaNP.selectAll('path').style('opacity',0);
+		  }else{
+			romaniaNP.selectAll('path').style('opacity',0.9);
+		  }
+		}
+		
+		function checkPA(){
+			if(pachecked == false){
+			romaniaPA.selectAll('path').style('opacity',0);
+		  }else{
+			romaniaPA.selectAll('path').style('opacity',1);
+		  }
+		}
 		 
 		 
 		 function getMaxMin(passedArray){
@@ -391,7 +622,7 @@
 			
 			var colorScale = d3.scale.linear()
 				.domain([localmin, localmin+ divided, localmin+ divided*2,localmin+ divided*3,localmin+ divided*4,localmin+ divided*5])
-				.range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000']);
+				.range(['#fde0dd','#fcc5c0','#fa9fb5','#f768a1','#dd3497','#ae017e']);
 			return colorScale;
 		};
 		
@@ -499,38 +730,50 @@
 
 					romaniaPath.selectAll('path').attr("d", path);
 					romaniaBorder.select('path').attr("d", path);	
-					romaniaNP.selectAll('path').attr("d",path);		
+					romaniaNP.selectAll('path').attr("d",path);	
+					romaniaPA.selectAll("path").attr("d",path);	
 				}
-			
+				
+				
+				
+// 				if (map.getZoom() >= 9) {
+// 					
+// 					romaniaPA.selectAll("path").style("opacity",1);
+// 				
+// 				}else{
+// 					
+// 					romaniaPA.selectAll("path").style("opacity",0);
+// 				}
+// 			
 
 			//if fieldsites view is selected
 		
-				 if (map.getZoom() === 10) {
-					removeSites();
-					//drawSites(5); if circle instead of image 
-					drawSites(20); 
-				 }else if(map.getZoom() === 11){
-					removeSites();
-					//drawSites(7); 
-					drawSites(25); 
-			 
-				 }else if(map.getZoom() === 12){
-					removeSites();
-					//drawSites(9);
-					drawSites(30); 
-				 }else if(map.getZoom() === 13){
-					removeSites();
-					drawSites(35);
-				 }else if (map.getZoom() === 14){
-					removeSites();
-					//drawSites(11);
-					drawSites(35);
-				 }
-				 else if (map.getZoom() === 15){
-					removeSites();
-					drawSites(40);
-			 
-				 }
+// 				 if (map.getZoom() === 10) {
+// 					removeSites();
+// 					//drawSites(5); if circle instead of image 
+// 					drawSites(20); 
+// 				 }else if(map.getZoom() === 11){
+// 					removeSites();
+// 					//drawSites(7); 
+// 					drawSites(25); 
+// 			 
+// 				 }else if(map.getZoom() === 12){
+// 					removeSites();
+// 					//drawSites(9);
+// 					drawSites(30); 
+// 				 }else if(map.getZoom() === 13){
+// 					removeSites();
+// 					drawSites(35);
+// 				 }else if (map.getZoom() === 14){
+// 					removeSites();
+// 					//drawSites(11);
+// 					drawSites(35);
+// 				 }
+// 				 else if (map.getZoom() === 15){
+// 					removeSites();
+// 					drawSites(40);
+// 			 
+// 				 }
 				
 		
 		}
@@ -542,7 +785,7 @@
 			//console.log(display);
 			
 			
-				var labelHTML = "<h4 style='background-color:#fc8d59;' >"+d.properties.name+"</h4><b><p>&nbsp;&nbsp; Volume: "+d.properties.volume+"</b> cubic meters</p>";
+				var labelHTML = "<h4 style='background-color:#fa9fb5;' >"+d.properties.name+"</h4><b><p>&nbsp;&nbsp; Volume: "+d.properties.volume+"</b> cubic meters</p>";
 		
 				var infolabel=d3.select("#mapContainer").append("div")
 					.attr("class","infolabel")
@@ -636,6 +879,8 @@
 
 	});
 
+	});
+	
 	});
 	
 	});
