@@ -260,6 +260,15 @@
 		.inline{
 			display: inline;
 		}
+		
+		
+		#gwrapper{
+			isolation: isolate;
+		}
+		
+		.protectedareas, .parks{
+			mix-blend-mode: multiply;
+		}
 	</style>
 </head>
 <body>
@@ -407,6 +416,8 @@
 		var svg = d3.select(map.getPanes().overlayPane).append("svg"),
 			g = svg.append("g").attr("class", "leaflet-zoom-hide");
 		var sites = g.append("g");
+		
+		var wrapper = g.append("g").attr("id","gwrapper");
 
 		function projectPoint(x, y) {
 			var point = map.latLngToLayerPoint(new L.LatLng(y, x)); 
@@ -425,10 +436,10 @@
 	
 	d3.json("geozpi.json", function(error, protect){
 
-		var romaniaPath = g.append("g").attr("id","counties");
-		var romaniaBorder = g.append("g").attr("id","country");
-		var romaniaNP = g.append("g").attr("id","np");
-		var romaniaPA = g.append("g").attr("id","protect");
+		var romaniaPath = wrapper.append("g").attr("id","counties");
+		var romaniaBorder = wrapper.append("g").attr("id","country");
+		var romaniaNP = wrapper.append("g").attr("id","parks");
+		var romaniaPA = wrapper.append("g").attr("id","protect");
 		
 		console.log(np);
 		console.log(protect);
@@ -460,6 +471,7 @@
 				  		.enter()
 				  		.append("path")
 				  		.attr("d",path)
+				  		.attr("class","protectedareas")
 				  		.attr("fill", "#83ae9b")
 				  		.style("stroke","#969696")
 					    .style("stroke-width",1)
@@ -470,6 +482,7 @@
 				  		.enter()
 				  		.append("path")
 				  		.attr("d",path)
+				  		.attr("class","parks")
 				  		.attr("fill", function(d) {
 						  return choropleth(d.properties.volume, colorScale);
 						})
